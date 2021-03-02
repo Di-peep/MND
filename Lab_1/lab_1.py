@@ -1,8 +1,10 @@
 from random import randint
 import prettytable
 import numpy as np
+from time import time
 
 
+start = time()
 size_x = 20
 size_a = 10
 a = [randint(1, size_a) for _ in range(4)]
@@ -48,3 +50,5 @@ print("Еталонне значення Y =", Ye)
 sh = [(i - Ye)**2 for i in Y]
 print(sh)
 print("Шукане мінімальне =", min(sh))
+
+print(f"Час виконання програми дорівнює:{(time() - start)}")
