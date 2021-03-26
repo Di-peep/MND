@@ -62,9 +62,9 @@ class Experiment:
         ]
         return np.array(X_norm)
 
-    def check_r(self) -> bool:
-        for i in range(len(self.y_var)):
-            for j in range(len(self.y_var)):
+    def check_r(self) -> bool:                      # Перевіряємо однорідність дисперсії за критерієм Романовського
+        for i in range(len(self.y_var)):            # Для кожної пари комбінацій i, j (i=1,N; j=1,N)
+            for j in range(len(self.y_var)):        # Порівнюємо дисперсії y та обчислюємо експериментальне значення критерію Романовського
                 if i > j:
                     if self.y_var[i] >= self.y_var[j]:
                         R = (abs((self.m - 2) * self.y_var[i] /
