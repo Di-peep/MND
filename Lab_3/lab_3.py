@@ -8,7 +8,7 @@ from functools import partial
 class FractionalExperiment:
     """Проведення дробового трьохфакторного експерименту"""
 
-    def __init__(self, n, m):
+    def __init__(self, n, m, x_min, x_max):
         self.n = n
         self.m = m
         self.x_min = (10 + 25 + 40) / 3
@@ -116,6 +116,13 @@ class FractionalExperiment:
         F_p = S_ad / S_kv_aver
         return F_p
 
+    def altask(self):
+        x_min = self.kef * self.x_min
+        x_max = self.kef * self.x_max
+        ner = FractionalExperiment(7, 8, x_min, x_max)
+        ner.check()
+
+
     def check(self):
         """Проведення статистичних перевірок"""
         student = partial(t.ppf, q=1 - 0.025)
@@ -124,6 +131,7 @@ class FractionalExperiment:
         res = [t for t in ts if t > t_student]
         B = self.count_koefs()
         final_k = [B[ts.index(i)] for i in ts if i in res]
+        self.kef = np.prod(final_k)
         for j in range(self.n):
             self.y_new.append(self.regression([self.x[j][ts.index(i)] for i in ts if i in res], final_k))
         print(f'\nЗначення "y" з коефіцієнтами {final_k}')
@@ -153,8 +161,14 @@ class FractionalExperiment:
         if F_p < f_t:
             print('Математична модель адекватна експериментальним даним')
         else:
-            print('Математична модель не адекватна експериментальним даним')
+            print('Математична модель не адекватна експериментальним даним\nЗмінюємо значення коефіцієнтів')
+            self.altask()
 
 
-experiment = FractionalExperiment(7, 8)
-experiment.check()
+experiment = FractionalExperiment(7, 8, (10 + 25 + 40) / 3, (40 + 45 + 45) / 3)
+# noinspection PyBroadException
+try:
+    experiment.check()
+except Exception:
+    print("\nБуло проведено кілька змін коефіцієнтів. Математична модель неадекватна.")
+
