@@ -25,9 +25,23 @@ student_lst = None
 d = None
 q = None
 f3 = None
+f_time = 0  # timer for functions
 
+
+def timer_func(func):
+    def wrap_func(*args, **kwargs):
+        global f_time
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time()
+
+        f_time += t2 - t1
+        return result
+
+    return wrap_func
 
 class Perevirku:
+    @timer_func
     def get_cohren_value(self, size_of_selections, qty_of_selections, significance):
         from _pydecimal import Decimal
         from scipy.stats import f
@@ -38,11 +52,13 @@ class Perevirku:
         result = fisher / (fisher + (size_of_selections - 1 - 1))
         return Decimal(result).quantize(Decimal('.0001')).__float__()
 
+    @timer_func
     def get_student_value(f3, significance):
         from _pydecimal import Decimal
         from scipy.stats import t
         return Decimal(abs(t.ppf(significance / 2, f3))).quantize(Decimal('.0001')).__float__()
 
+    @timer_func
     def get_fisher_value(f3, f4, significance):
         from _pydecimal import Decimal
         from scipy.stats import f
@@ -270,3 +286,4 @@ if __name__ == '__main__':
             continue
 
     print(f'За 10 секунд експеремент був адекватним {adekvat} разів з {cnt}')
+    print(f'Час виконання перевірок: {f_time}')
