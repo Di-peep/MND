@@ -160,7 +160,11 @@ def check(X, Y, B, n, m, norm=False):
 
     print(f'\nЗначення "y" з коефіцієнтами {final_k}')
     print(y_new)
-
+    
+    if len(final_k) == 1:
+        m += 1
+        check(X, Y, B, n, m, norm=False)
+    
     d = len(res)
     if d >= n:
         print('\nF4 <= 0')
