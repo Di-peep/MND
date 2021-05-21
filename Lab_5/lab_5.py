@@ -192,7 +192,11 @@ def check(X, Y, B, n, m):
     final_k = [B[i] for i in range(len(ts)) if ts[i] in res]
     print('\nКоефіцієнти {} статистично незначущі, тому ми виключаємо їх з рівняння.'.format(
         [round(i, 3) for i in B if i not in final_k]))
-
+    
+    if len(final_k) == 2:
+        print('Кількість значущих коефіцієнтів=2, тому мат. модель не адекватна')
+        return
+    
     y_new = []
     for j in range(n):
         y_new.append(regression([X[j][i] for i in range(len(ts)) if ts[i] in res], final_k))
